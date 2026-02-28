@@ -1,0 +1,13 @@
+---
+# SPDX-License-Identifier: MIT
+galaxy_info:
+  role_name: sshd_conf
+  namespace: fablab_ansbach
+  author: Kilian Kreibich
+  description: Manage the OpenSSH daemon configuration via template and (optionally) service state.
+  company: FabLab Ansbach e.V.
+  license: MIT
+  min_ansible_version: "2.1"
+  galaxy_tags: []
+
+dependencies: []

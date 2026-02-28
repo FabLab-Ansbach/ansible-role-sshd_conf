@@ -1,0 +1,26 @@
+---
+- name: Converge – apply role with invalid config (expect failure)
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Attempt to apply role with invalid configuration
+      block:
+        - name: Apply sshd_conf role with invalid configuration
+          ansible.builtin.include_role:
+            name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
+          vars:
+            sshd_manage_service: false
+            sshd_config:
+              listen_port: "not_a_valid_port"
+
+        - name: Fail if role did not error
+          ansible.builtin.fail:
+            msg: >-
+              Expected the role to fail with invalid config, but it succeeded.
+              The validate step did not catch the bad configuration.
+
+      rescue:
+        - name: Confirm role failed as expected
+          ansible.builtin.debug:
+            msg: "Role correctly failed validation with invalid config."

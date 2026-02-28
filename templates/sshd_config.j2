@@ -1,0 +1,71 @@
+#
+# This file is managed by Ansible.
+# Changing it manually might be a bad idea.
+#
+# generated in sshd-conf rule from sshd_config.j2
+#
+
+{% macro yesno(value) -%}
+{{ 'yes' if value else 'no' }}
+{%- endmacro %}
+
+Port {{ sshd_config_effective.listen_port }}
+AddressFamily {{ sshd_config_effective.address_family }}
+{% for address in sshd_config_effective.listen_address %}
+ListenAddress {{ address }}
+{% endfor %}
+{% for hostkey in sshd_config_effective.host_key %}
+HostKey {{ hostkey }}
+{% endfor %}
+RekeyLimit {{ sshd_config_effective.rekey_limit }}
+SyslogFacility {{ sshd_config_effective.syslog_facility }}
+LogLevel {{ sshd_config_effective.log_level }}
+LoginGraceTime {{ sshd_config_effective.login_grace_time }}
+PermitRootLogin {{ sshd_config_effective.permit_root_login }}
+StrictModes {{ yesno(sshd_config_effective.strict_modes) }}
+MaxAuthTries {{ sshd_config_effective.max_auth_tries }}
+MaxSessions {{ sshd_config_effective.max_sessions }}
+PubkeyAuthentication {{ yesno(sshd_config_effective.pubkey_authentication) }}
+AuthorizedKeysFile {{ sshd_config_effective.authorized_keys_file }}
+AuthorizedPrincipalsFile {{ sshd_config_effective.authorized_principals_file }}
+AuthorizedKeysCommand {{ sshd_config_effective.authorized_keys_command }}
+AuthorizedKeysCommandUser {{ sshd_config_effective.authorized_keys_command_user }}
+HostbasedAuthentication {{ yesno(sshd_config_effective.hostbased_authentication) }}
+IgnoreUserKnownHosts {{ yesno(sshd_config_effective.ignore_user_known_hosts) }}
+IgnoreRhosts {{ yesno(sshd_config_effective.ignore_rhosts) }}
+PasswordAuthentication {{ yesno(sshd_config_effective.password_authentication) }}
+PermitEmptyPasswords {{ yesno(sshd_config_effective.permit_empty_passwords) }}
+KbdInteractiveAuthentication {{ yesno(sshd_config_effective.keyboard_interactive_authentication) }}
+KerberosAuthentication {{ yesno(sshd_config_effective.kerberos_authentication) }}
+KerberosOrLocalPasswd {{ yesno(sshd_config_effective.kerberos_or_local_passwd) }}
+KerberosTicketCleanup {{ yesno(sshd_config_effective.kerberos_ticket_cleanup) }}
+GSSAPIAuthentication {{ yesno(sshd_config_effective.gssapi_authentication) }}
+GSSAPICleanupCredentials {{ yesno(sshd_config_effective.gssapi_cleanup_credentials) }}
+GSSAPIStrictAcceptorCheck {{ yesno(sshd_config_effective.gssapi_use_strict_acceptor_checking) }}
+GSSAPIKeyExchange {{ yesno(sshd_config_effective.gssapi_key_exchange) }}
+UsePAM {{ yesno(sshd_config_effective.use_pam) }}
+AllowAgentForwarding {{ yesno(sshd_config_effective.allow_agent_forwarding) }}
+AllowTcpForwarding {{ yesno(sshd_config_effective.allow_tcp_forwarding) }}
+GatewayPorts {{ yesno(sshd_config_effective.gateway_ports) }}
+X11Forwarding {{ yesno(sshd_config_effective.x11_forwarding) }}
+X11DisplayOffset {{ sshd_config_effective.x11_display_offset }}
+X11UseLocalhost {{ yesno(sshd_config_effective.x11_use_localhost) }}
+PermitTTY {{ yesno(sshd_config_effective.permit_tty) }}
+PrintMotd {{ yesno(sshd_config_effective.print_motd) }}
+PrintLastLog {{ yesno(sshd_config_effective.print_last_log) }}
+TCPKeepAlive {{ yesno(sshd_config_effective.tcp_keepalive) }}
+PermitUserEnvironment {{ yesno(sshd_config_effective.permit_user_environment) }}
+Compression {{ sshd_config_effective.compression }}
+ClientAliveInterval {{ sshd_config_effective.client_alive_interval }}
+ClientAliveCountMax {{ sshd_config_effective.client_alive_count_max }}
+UseDNS {{ yesno(sshd_config_effective.use_dns) }}
+PidFile {{ sshd_config_effective.pid_file }}
+MaxStartups {{ sshd_config_effective.max_startups }}
+PermitTunnel {{ yesno(sshd_config_effective.permit_tunnel) }}
+ChrootDirectory {{ sshd_config_effective.chroot_directory }}
+VersionAddendum {{ sshd_config_effective.version_addendum }}
+Banner {{ sshd_config_effective.banner }}
+AcceptEnv {{ sshd_config_effective.accept_env }}
+{% for subsystem in sshd_config_effective.subsystem %}
+Subsystem {{ subsystem }}
+{% endfor %}

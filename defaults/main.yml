@@ -1,0 +1,71 @@
+# SPDX-License-Identifier: MIT
+---
+# defaults file for sshd-conf
+sshd_service_name: >-
+  {{ (ansible_os_family == 'Debian') | ternary('ssh', 'sshd') }}
+sshd_package_name: openssh-server
+sshd_manage_service: true
+
+default_sshd_config:
+  listen_port: 22
+  address_family: any
+  listen_address:
+    - 0.0.0.0
+    - ::
+  host_key:
+    - /etc/ssh/ssh_host_rsa_key
+    - /etc/ssh/ssh_host_ecdsa_key
+    - /etc/ssh/ssh_host_ed25519_key
+  rekey_limit: default none
+  syslog_facility: AUTH
+  log_level: INFO
+  login_grace_time: 2m
+  permit_root_login: prohibit-password
+  strict_modes: true
+  max_auth_tries: 6
+  max_sessions: 10
+  pubkey_authentication: true
+  authorized_keys_file: .ssh/authorized_keys
+  authorized_principals_file: none
+  authorized_keys_command: none
+  authorized_keys_command_user: nobody
+  hostbased_authentication: false
+  ignore_user_known_hosts: false
+  ignore_rhosts: true
+  password_authentication: true
+  permit_empty_passwords: false
+  keyboard_interactive_authentication: true
+  kerberos_authentication: false
+  kerberos_or_local_passwd: true
+  kerberos_ticket_cleanup: true
+  gssapi_authentication: false
+  gssapi_cleanup_credentials: true
+  gssapi_use_strict_acceptor_checking: true
+  gssapi_key_exchange: false
+  use_pam: true
+  allow_agent_forwarding: true
+  allow_tcp_forwarding: true
+  gateway_ports: false
+  x11_forwarding: false
+  x11_display_offset: 10
+  x11_use_localhost: true
+  permit_tty: true
+  print_motd: true
+  print_last_log: true
+  tcp_keepalive: true
+  permit_user_environment: false
+  compression: delayed
+  client_alive_interval: 0
+  client_alive_count_max: 3
+  use_dns: false
+  pid_file: /var/run/sshd.pid
+  max_startups: 10:30:100
+  permit_tunnel: false
+  chroot_directory: none
+  version_addendum: none
+  banner: none
+  accept_env: LANG LC_*
+  subsystem: 
+    - "sftp internal-sftp"
+
+sshd_config: {}
