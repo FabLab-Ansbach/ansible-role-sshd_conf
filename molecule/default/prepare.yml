@@ -1,0 +1,11 @@
+---
+- name: Prepare
+  hosts: all
+  become: false
+  gather_facts: true
+  tasks:
+    - name: Install sudo
+      ansible.builtin.apt:
+        name: sudo
+        update_cache: true
+        state: present

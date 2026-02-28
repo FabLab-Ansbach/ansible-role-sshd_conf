@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: MIT
+---
+# handlers file for sshd-conf
+- name: restart sshd
+  service:
+    name: "{{ sshd_service_name }}"
+    state: restarted
+  when: sshd_manage_service | bool

@@ -1,0 +1,31 @@
+# SPDX-License-Identifier: MIT
+---
+# tasks file for sshd-conf
+- name: Install openssh-server
+  package:
+    name: "{{ sshd_package_name }}"
+    state: present
+
+- name: Merge config with defaults
+  set_fact:
+    sshd_config_effective: >-
+      {{
+        default_sshd_config
+        | combine(sshd_config | default({}), recursive=True)
+      }}
+
+- name: Configure sshd
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: '0600'
+    validate: /usr/sbin/sshd -t -f %s
+  notify: restart sshd
+- name: Ensure sshd is enabled and running
+  service:
+    name: "{{ sshd_service_name }}"
+    state: started
+    enabled: true
+  when: sshd_manage_service | bool

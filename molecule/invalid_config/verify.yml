@@ -1,0 +1,23 @@
+---
+- name: Verify – config file was not overwritten with invalid config
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Read current sshd_config
+      ansible.builtin.slurp:
+        path: /etc/ssh/sshd_config
+      register: sshd_config_content
+
+    - name: Assert invalid port value is not in sshd_config
+      ansible.builtin.assert:
+        that:
+          - "'not_a_valid_port' not in config_text"
+        fail_msg: >-
+          sshd_config contains the invalid port value!
+          Validation did not prevent the bad config from being written.
+        success_msg: >-
+          sshd_config does not contain the invalid value –
+          validation correctly prevented the config from being applied.
+      vars:
+        config_text: "{{ sshd_config_content.content | b64decode }}"

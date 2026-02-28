@@ -1,0 +1,42 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Check generated sshd config file metadata
+      ansible.builtin.stat:
+        path: /etc/ssh/sshd_config
+      register: sshd_config_stat
+
+    - name: Assert generated sshd config file metadata
+      ansible.builtin.assert:
+        that:
+          - sshd_config_stat.stat.exists
+          - sshd_config_stat.stat.mode == '0600'
+
+    - name: Read generated sshd config
+      ansible.builtin.slurp:
+        path: /etc/ssh/sshd_config
+      register: sshd_config_slurp
+
+    - name: Assert rendered sshd configuration values
+      ansible.builtin.assert:
+        that:
+          - "'Port 2222' in rendered_config"
+          - "'PasswordAuthentication no' in rendered_config"
+          - "'Subsystem sftp /usr/lib/openssh/sftp-server' in rendered_config"
+          - "'PermitRootLogin prohibit-password' in rendered_config"
+      vars:
+        rendered_config: "{{ sshd_config_slurp.content | b64decode }}"
+
+    - name: Check sshd process is running
+      ansible.builtin.command: pgrep -x sshd
+      register: sshd_process
+      changed_when: false
+
+    - name: Assert sshd is running
+      ansible.builtin.assert:
+        that:
+          - sshd_process.rc == 0
+        fail_msg: "sshd is not running"

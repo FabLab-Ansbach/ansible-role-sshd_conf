@@ -1,0 +1,40 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  gather_facts: true
+  pre_tasks:
+    - name: Install test prerequisites
+      ansible.builtin.apt:
+        name:
+          - openssh-server
+        update_cache: true
+        state: present
+    - name: Create /run/sshd directory
+      ansible.builtin.file:
+        path: /run/sshd
+        state: directory
+        mode: '0755'
+  roles:
+    - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
+      vars:
+        sshd_manage_service: false
+        sshd_config:
+          listen_port: 2222
+          listen_address:
+            - 0.0.0.0
+          password_authentication: false
+          subsystem:
+            - sftp /usr/lib/openssh/sftp-server
+
+  post_tasks:
+    - name: Check if sshd is running
+      ansible.builtin.command: pgrep -x sshd
+      register: sshd_running
+      changed_when: false
+      failed_when: false
+
+    - name: Start sshd
+      ansible.builtin.command: /usr/sbin/sshd
+      when: sshd_running.rc != 0
+      changed_when: true
