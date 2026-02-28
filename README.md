@@ -81,10 +81,6 @@ Any key below can be overridden by setting it in `sshd_config`.
 | `accept_env` | `LANG LC_*` | Environment variables accepted from client. |
 | `subsystem` | `["sftp internal-sftp"]` | List of subsystem definitions. |
 
-Dependencies
-------------
-
-
 
 Example Playbook
 ----------------
@@ -93,6 +89,9 @@ Example Playbook
     - hosts: servers
       roles:
         - role: sshd_conf
+          src: https://github.com/FabLab-Ansbach/ansible-role-sshd_conf.git
+          scm: git
+          version: main
           vars:
             sshd_config:
               password_authentication: false
