@@ -85,13 +85,19 @@ Any key below can be overridden by setting it in `sshd_config`.
 Example Playbook
 ----------------
 
+`requirements.yaml`
+```yaml
+- role: sshd_conf
+  src: https://github.com/FabLab-Ansbach/ansible-role-sshd_conf.git
+  scm: git
+  version: main
+```
+
+`playbook.yaml`
 ```yaml
     - hosts: servers
       roles:
         - role: sshd_conf
-          src: https://github.com/FabLab-Ansbach/ansible-role-sshd_conf.git
-          scm: git
-          version: main
           vars:
             sshd_config:
               password_authentication: false
